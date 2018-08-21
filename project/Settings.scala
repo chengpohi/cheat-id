@@ -1,10 +1,9 @@
 import sbt.Keys._
 import sbt._
-import sbtassembly.AssemblyKeys._
 
 object Settings {
   lazy val commonSettings = Seq(
-    version := "0.1-SNAPSHOT",
+    version := "0.1",
     organization := "com.github.chengpohi",
     scalaVersion := "2.12.6",
     scalacOptions ++= Seq("-Ywarn-unused",
@@ -12,13 +11,11 @@ object Settings {
       "-feature",
       "-language:implicitConversions",
       "-language:postfixOps"),
-    resolvers += Resolver.mavenLocal,
-    resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases",
-    test in assembly := {}
+    resolvers += Resolver.mavenLocal
   )
 
   lazy val rootProjectSettings = Seq(
-    name := "id-generator",
+    name := "cheat-id",
     scalacOptions ++= Seq(
       "-Ywarn-unused",
       "-Ywarn-unused-import",
