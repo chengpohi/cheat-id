@@ -1,40 +1,40 @@
 package com.github.chengpohi.id.uuid
 
+import java.security.MessageDigest
 import java.util.Base64
 import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 
 
-class TimeBasedUUID {
+class NameTimeBasedUUID {
   private val sequenceNumber = new AtomicInteger(UUIDFactors.SECURE_RANDOM.nextInt)
   private val lastTimestamp = new AtomicLong(0)
 
-  def getBase64UUID: String = {
+  def getBase64UUID(name: Array[Byte]): String = {
+    val nameBytes = MessageDigest.getInstance("MD5").digest(name).toStream.take(9).toArray
     val sequenceId = sequenceNumber.incrementAndGet & 0xffffff
     val timestamp = lastTimestamp.updateAndGet(i => {
       Math.max(i, System.currentTimeMillis())
     })
 
-    val uuidBytes: Array[Byte] = getHighBits(sequenceId, timestamp) ++
-      UUIDFactors.MAC_ADDRESS ++
-      getLowBits(sequenceId, timestamp)
+    val uuidBytes: Array[Byte] = getHighBytes(sequenceId, timestamp) ++
+      nameBytes ++
+      getLowBytes(sequenceId, timestamp)
 
     Base64.getUrlEncoder.withoutPadding.encodeToString(uuidBytes)
   }
-  private def getLowBits(sequenceId: Int, timestamp: Long) = {
+  private def getLowBytes(sequenceId: Int, timestamp: Long) = {
     Array(
       (timestamp >>> 8).toByte,
       (sequenceId >>> 8).toByte,
       timestamp.toByte
     )
   }
-  private def getHighBits(sequenceId: Int, timestamp: Long) = {
+  private def getHighBytes(sequenceId: Int, timestamp: Long) = {
     Array(
       sequenceId.toByte,
       (sequenceId >>> 16).toByte,
       (timestamp >>> 16).toByte,
-      (timestamp >>> 24).toByte,
-      (timestamp >>> 32).toByte,
-      (timestamp >>> 40).toByte
+      (timestamp >>> 24).toByte
     )
   }
 }

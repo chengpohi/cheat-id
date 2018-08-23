@@ -4,7 +4,7 @@ import java.util.Base64
 import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 
 class ShortUUID {
-  private val sequenceNumber = new AtomicInteger(UUIDFactors.INSTANCE.nextInt)
+  private val sequenceNumber = new AtomicInteger(UUIDFactors.SECURE_RANDOM.nextInt)
   private val lastTimestamp = new AtomicLong(0)
   lazy val SECURE_MUNGED_ADDRESS: Array[Byte] = UUIDFactors.MAC_ADDRESS
 

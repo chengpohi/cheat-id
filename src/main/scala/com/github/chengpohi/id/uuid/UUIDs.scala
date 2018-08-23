@@ -13,6 +13,7 @@ object UUIDs {
   private val AVAILABLE_ENCODED_BITS = 16
   val TIME_BASED_UUID = new TimeBasedUUID
   val SHORT_UUID = new ShortUUID
+  val NAME_TIME_BASED_UUID = new NameTimeBasedUUID
 
   /**
     * random uuid
@@ -37,6 +38,20 @@ object UUIDs {
     Base64.getEncoder.withoutPadding().encodeToString(buffer.array())
   }
 
+  /**
+    * generate name based uuid and base64 encode for length 22
+    *
+    * @return base64 encoded random uuid
+    */
+  def getNamedBase64UUID(named: Array[Byte]): String = {
+    val uuid = UUID.nameUUIDFromBytes(named)
+    val buffer = ByteBuffer.wrap(new Array[Byte](AVAILABLE_ENCODED_BITS))
+
+    buffer.putLong(uuid.getMostSignificantBits)
+    buffer.putLong(uuid.getLeastSignificantBits)
+    Base64.getEncoder.withoutPadding().encodeToString(buffer.array())
+  }
+
 
   /**
     * generate time based uuid and length 20
@@ -44,6 +59,15 @@ object UUIDs {
     * @return time based base64 uuid
     */
   def getTimeBasedBase64UUID: String = TIME_BASED_UUID.getBase64UUID
+
+  /**
+    * generate name time based uuid and length 20
+    * this can be use with user id
+    *
+    * @return name based base64 uuid
+    */
+  def getNameTimeBasedBase64UUID(name: Array[Byte]): String = NAME_TIME_BASED_UUID.getBase64UUID(name)
+
 
   def getShortUUID: String = SHORT_UUID.getBase64UUID
 
@@ -55,7 +79,7 @@ object UUIDs {
 
 
 object UUIDFactors {
-  lazy val INSTANCE: SecureRandom = new SecureRandom
+  lazy val SECURE_RANDOM: SecureRandom = new SecureRandom
   //6 bytes mac address
   lazy val MAC_ADDRESS: Array[Byte] = {
     val networkInterface: Try[util.Enumeration[NetworkInterface]] = Try(NetworkInterface.getNetworkInterfaces)
@@ -73,7 +97,7 @@ object UUIDFactors {
       .map(addr => addr.getHardwareAddress)
       .getOrElse({
         val bytes = new Array[Byte](6)
-        INSTANCE.nextBytes(bytes)
+        SECURE_RANDOM.nextBytes(bytes)
         bytes
       })
   }

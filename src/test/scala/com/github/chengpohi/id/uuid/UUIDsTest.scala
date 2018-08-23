@@ -42,6 +42,21 @@ class UUIDsTest extends FlatSpec with Matchers {
     ids.toSet.size should equal(20000)
   }
 
+  it should "thread safe generate name time based base64 uuid" in {
+    val ids = (0 until 20000).map(i => {
+      Future {
+        val id = UUIDs.getNamedBase64UUID(UUIDs.getBase64UUID.getBytes)
+        id.length should equal(20)
+        id
+      }
+    })
+
+    val is = Await.result(Future.sequence(ids), Duration.Inf)
+
+    ids.toSet.size should equal(20000)
+  }
+
+
   it should "generate short base64 id" in {
     //    (0 until 5000).foreach(j => {
     val ids = (0 until 20000).map(i => {
