@@ -1,11 +1,11 @@
-package com.github.chengpohi.id.uuid
+package com.github.chengpohi.uuid
 
 import java.util.Base64
 import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 
-
 class TimeBasedUUID {
-  private val sequenceNumber = new AtomicInteger(UUIDFactors.SECURE_RANDOM.nextInt)
+  private val sequenceNumber = new AtomicInteger(
+    UUIDFactors.SECURE_RANDOM.nextInt)
   private val lastTimestamp = new AtomicLong(0)
 
   def getBase64UUID: String = {
@@ -38,5 +38,3 @@ class TimeBasedUUID {
     )
   }
 }
-
-

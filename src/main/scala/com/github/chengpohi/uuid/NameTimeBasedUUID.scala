@@ -1,16 +1,17 @@
-package com.github.chengpohi.id.uuid
+package com.github.chengpohi.uuid
 
 import java.security.MessageDigest
 import java.util.Base64
 import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 
-
 class NameTimeBasedUUID {
-  private val sequenceNumber = new AtomicInteger(UUIDFactors.SECURE_RANDOM.nextInt)
+  private val sequenceNumber = new AtomicInteger(
+    UUIDFactors.SECURE_RANDOM.nextInt)
   private val lastTimestamp = new AtomicLong(0)
 
   def getBase64UUID(name: Array[Byte]): String = {
-    val nameBytes = MessageDigest.getInstance("MD5").digest(name).toStream.take(9).toArray
+    val nameBytes =
+      MessageDigest.getInstance("MD5").digest(name).toStream.take(9).toArray
     val sequenceId = sequenceNumber.incrementAndGet & 0xffffff
     val timestamp = lastTimestamp.updateAndGet(i => {
       Math.max(i, System.currentTimeMillis())
@@ -38,5 +39,3 @@ class NameTimeBasedUUID {
     )
   }
 }
-
-

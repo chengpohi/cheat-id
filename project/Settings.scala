@@ -7,10 +7,10 @@ object Settings {
     organization := "com.github.chengpohi",
     scalaVersion := "2.12.6",
     scalacOptions ++= Seq("-Ywarn-unused",
-      "-Ywarn-unused-import",
-      "-feature",
-      "-language:implicitConversions",
-      "-language:postfixOps"),
+                          "-Ywarn-unused-import",
+                          "-feature",
+                          "-language:implicitConversions",
+                          "-language:postfixOps"),
     resolvers += Resolver.mavenLocal
   )
 

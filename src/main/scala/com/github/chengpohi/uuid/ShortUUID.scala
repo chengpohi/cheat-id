@@ -1,14 +1,15 @@
-package com.github.chengpohi.id.uuid
+package com.github.chengpohi.uuid
 
 import java.util.Base64
 import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 
 class ShortUUID {
-  private val sequenceNumber = new AtomicInteger(UUIDFactors.SECURE_RANDOM.nextInt)
+  private val sequenceNumber = new AtomicInteger(
+    UUIDFactors.SECURE_RANDOM.nextInt)
   private val lastTimestamp = new AtomicLong(0)
   lazy val SECURE_MUNGED_ADDRESS: Array[Byte] = UUIDFactors.MAC_ADDRESS
 
-  def getBase64UUID: String = {
+  def getBase64ID: String = {
     val sequenceId = sequenceNumber.incrementAndGet & 0xffffff
     val timestamp = lastTimestamp.updateAndGet(i => {
       Math.max(i, System.currentTimeMillis())

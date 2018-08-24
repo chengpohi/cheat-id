@@ -7,7 +7,7 @@ cheat id
 
 **Version 3** random UUID
 
-```java
+```scala
 UUIDs.getBase64UUID
 ```
 
@@ -15,7 +15,7 @@ UUIDs.getBase64UUID
 
 This will generate time based uuid, and it's continuous increment by the time
 
-```java
+```scala
 UUIDs.getTimeBasedBase64UUID
 ```
 
@@ -24,12 +24,24 @@ UUIDs.getTimeBasedBase64UUID
 This will generate base on the **name**, it can be used with actual **user id**, 
 so every user will generate distinct user id, never conflict.
 
-```java
+```scala
 UUIDs.getNameTimeBasedBase64UUID
 ```
 
-# Short ID
+## Short ID
 
-```java
+```scala
 UUIDs.getShortUUID
+```
+
+## Number Based UUID
+
+**Number Based UUID** is used to generate **unique**, **short**, **short id** by **number**, this can be used 
+to generate like short url link, for avoid **guess**, we add the **salt** for generate **id**.
+
+```scala
+val id = UUIDs.NUMBER_BASED_UUID.getBase64IdByInt(123, "salt".getBytes())
+//YHIrcQ
+val number = UUIDs.NUMBER_BASED_UUID.decodeIntId(123, "salt".getBytes())
+//123
 ```
